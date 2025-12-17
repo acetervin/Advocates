@@ -34,3 +34,5 @@ Configured as a static site deployment serving from the `src/` directory.
 
 ## Recent Changes
 - December 17, 2025: Initial import and Replit environment setup
+- December 17, 2025: Created missing pages (about.html, team.html, contact.html) with full styling
+- December 17, 2025: Added comprehensive responsive CSS for all pages at 992px and 600px breakpoints
