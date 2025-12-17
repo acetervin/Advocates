@@ -27,6 +27,7 @@ document.addEventListener('DOMContentLoaded', function() {
         await loadComponents();
         initializeNavigation();
         AOS.init();
+        initStatCounters();
     };
 
     function initializeNavigation() {
@@ -285,6 +286,56 @@ document.addEventListener('DOMContentLoaded', function() {
         if (e.key === 'Escape') {
             closeVideo();
         }
+    }
+
+    /* --- Stats counter (animate numbers when scrolled into view) --- */
+    function initStatCounters() {
+        const statsSections = document.querySelectorAll('.stats-section');
+        if (!statsSections.length) return;
+
+        const animateNumber = (el, endValue, prefix = '', suffix = '', decimals = 0, duration = 1400) => {
+            const start = performance.now();
+            const startValue = 0;
+
+            const tick = (now) => {
+                const progress = Math.min((now - start) / duration, 1);
+                const eased = progress; // linear - can replace with easing if desired
+                const current = startValue + (endValue - startValue) * eased;
+                const formatted = decimals > 0 ? current.toFixed(decimals) : Math.round(current).toString();
+                el.textContent = prefix + formatted + suffix;
+                if (progress < 1) requestAnimationFrame(tick);
+            };
+
+            requestAnimationFrame(tick);
+        };
+
+        const observer = new IntersectionObserver((entries, obs) => {
+            entries.forEach(entry => {
+                if (!entry.isIntersecting) return;
+                const section = entry.target;
+                const targets = section.querySelectorAll('h3, .stat-number');
+                targets.forEach(node => {
+                    const text = node.textContent.trim();
+                    // parse prefix, numeric part, suffix
+                    const m = text.match(/^([^0-9\-\.]*)?([0-9,.]+)?(.*)$/);
+                    if (!m) return;
+                    const prefix = m[1] || '';
+                    const numStr = (m[2] || '').replace(/,/g, '');
+                    const suffix = m[3] || '';
+                    if (!numStr) return;
+                    const isFloat = numStr.indexOf('.') !== -1;
+                    const endVal = parseFloat(numStr);
+                    const decimals = isFloat ? (numStr.split('.')[1] || '').length : 0;
+                    // prevent re-animating
+                    if (node.dataset.animated === 'true') return;
+                    node.dataset.animated = 'true';
+                    animateNumber(node, endVal, prefix, suffix, decimals);
+                });
+                obs.unobserve(section);
+            });
+        }, { threshold: 0.4 });
+
+        statsSections.forEach(s => observer.observe(s));
     }
 
     initializePage();
