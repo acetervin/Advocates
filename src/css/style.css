@@ -21,6 +21,39 @@
 * { margin: 0; padding: 0; box-sizing: border-box; }
 html { scroll-behavior: smooth; }
 
+/* --- MOBILE / RESPONSIVE SAFEGUARDS --- */
+html, body {
+    max-width: 100%;
+    overflow-x: hidden;
+}
+
+img, picture, video, iframe {
+    max-width: 100%;
+    height: auto;
+    display: block;
+}
+
+.container > * {
+    min-width: 0;
+}
+
+/* make common grid/flex containers allow children to shrink */
+.hero .container,
+.team-grid,
+.practice-grid,
+.blog-grid,
+.case-studies-grid {
+    min-width: 0;
+}
+
+@media (max-width: 992px) {
+    .hero-watermark { font-size: 8rem; right: 0; }
+}
+
+@media (max-width: 600px) {
+    .hero-watermark { display: none; }
+}
+
 /* --- CONTAINER --- */
 .container {
     max-width: 1200px;
@@ -1860,7 +1893,7 @@ h1, h2, h3, h4, h5 {
     background: #ddd;
     border-radius: 15px;
     overflow: hidden;
-    max-width: 1200px; /* Limit width */
+    max-width: 100; /* Limit width */
     margin: 0 auto 6rem auto; /* Center and add bottom space */
 }
 
