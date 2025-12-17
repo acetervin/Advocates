@@ -26,6 +26,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const initializePage = async () => {
         await loadComponents();
         initializeNavigation();
+        AOS.init();
     };
 
     function initializeNavigation() {

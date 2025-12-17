@@ -11,13 +11,15 @@
     <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400;1,500&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
 
     <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/animations.css">
+    <link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
 </head>
 <body>
 
     <div id="top-bar-placeholder"></div>
     <div id="navbar-placeholder"></div>
 
-    <section class="page-header">
+    <section class="page-header" data-aos="fade-down">
         <div class="page-header-content">
             <span class="section-subtitle">Meet Our Team</span>
             <h1>Our <span class="heading-italic">Attorneys</span></h1>
@@ -25,7 +27,7 @@
         </div>
     </section>
 
-    <section class="team-page-section">
+    <section class="team-page-section" data-aos="fade-up">
         <div class="team-intro">
             <span class="section-subtitle">Legal Experts</span>
             <h2>Dedicated <span class="heading-italic">Professionals</span></h2>
@@ -131,7 +133,7 @@
         </div>
     </section>
 
-    <section class="cta-section">
+    <section class="cta-section" data-aos="fade-up">
         <div class="cta-content">
             <h2>Work With Our Expert Team</h2>
             <p>Schedule a consultation with one of our experienced attorneys today</p>
@@ -142,5 +144,9 @@
     <div id="footer-placeholder"></div>
 
     <script src="js/script.js"></script>
+    <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
+    <script>
+      AOS.init();
+    </script>
 </body>
 </html>

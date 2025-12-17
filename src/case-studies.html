@@ -11,13 +11,14 @@
     <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400;1,500&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
 
     <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
 </head>
 <body>
 
     <div id="top-bar-placeholder"></div>
     <div id="navbar-placeholder"></div>
 
-    <section class="page-header">
+    <section class="page-header" data-aos="fade-in">
         <div class="page-header-content">
             <span class="section-subtitle">Our Track Record</span>
             <h1>Case Studies & <span class="heading-italic">Success Stories</span></h1>
@@ -26,7 +27,7 @@
     </section>
 
     <section class="section case-studies-section">
-        <div class="case-study">
+        <div class="case-study" data-aos="fade-up">
             <div class="case-study-header">
                 <h3>Successful M&A Transaction Worth KES 5.2 Billion</h3>
                 <span class="case-category">Corporate & Commercial</span>
@@ -59,7 +60,7 @@
             </div>
         </div>
 
-        <div class="case-study" style="background: white;">
+        <div class="case-study" style="background: white;" data-aos="fade-up">
             <div class="case-study-header">
                 <h3>Commercial Property Dispute Resolution - KES 180 Million Claim</h3>
                 <span class="case-category">Dispute Resolution</span>
@@ -92,7 +93,7 @@
             </div>
         </div>
 
-        <div class="case-study">
+        <div class="case-study" data-aos="fade-up">
             <div class="case-study-header">
                 <h3>Land Title Registration and Property Protection - Multi-Property Portfolio</h3>
                 <span class="case-category">Real Estate Law</span>
@@ -125,7 +126,7 @@
             </div>
         </div>
 
-        <div class="case-study" style="background: white;">
+        <div class="case-study" style="background: white;" data-aos="fade-up">
             <div class="case-study-header">
                 <h3>Intellectual Property Protection - Trademark Registration and Enforcement</h3>
                 <span class="case-category">Intellectual Property</span>
@@ -158,7 +159,7 @@
             </div>
         </div>
 
-        <div class="case-study">
+        <div class="case-study" data-aos="fade-up">
             <div class="case-study-header">
                 <h3>Family Succession Planning - Estate Administration Worth KES 450 Million</h3>
                 <span class="case-category">Family Law</span>
@@ -192,7 +193,7 @@
         </div>
     </section>
 
-    <section class="cta-section">
+    <section class="cta-section" data-aos="zoom-in">
         <div class="cta-content">
             <h2>Let Us Handle Your Legal Challenges</h2>
             <p>With a proven track record of success, we're ready to achieve results for you</p>
@@ -203,5 +204,9 @@
     <div id="footer-placeholder"></div>
 
     <script src="js/script.js"></script>
+    <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
+    <script>
+      AOS.init();
+    </script>
 </body>
 </html>

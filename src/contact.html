@@ -11,13 +11,15 @@
     <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400;1,500&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
 
     <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/animations.css">
+    <link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
 </head>
 <body>
 
     <div id="top-bar-placeholder"></div>
     <div id="navbar-placeholder"></div>
 
-    <section class="page-header">
+    <section class="page-header" data-aos="fade-down">
         <div class="page-header-content">
             <span class="section-subtitle">Get In Touch</span>
             <h1>Contact <span class="heading-italic">Us</span></h1>
@@ -25,7 +27,7 @@
         </div>
     </section>
 
-    <section class="contact-section">
+    <section class="contact-section" data-aos="fade-up">
         <div class="contact-grid">
             <div class="contact-info-box">
                 <h3>Get in <span class="heading-italic">Touch</span></h3>
@@ -98,11 +100,11 @@
         </div>
     </section>
 
-    <section class="map-section">
+    <section class="map-section" data-aos="zoom-in">
         <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d15955.277444357954!2d36.81156565!3d-1.28333315!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x182f10d22ba7e0d5%3A0xb5a3a8f4c2b8d5c1!2sNairobi%20City%20Centre!5e0!3m2!1sen!2ske!4v1702838400000!5m2!1sen!2ske" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
     </section>
 
-    <section class="cta-section">
+    <section class="cta-section" data-aos="fade-up">
         <div class="cta-content">
             <h2>Need Urgent Legal Assistance?</h2>
             <p>Call our 24/7 emergency legal helpline for immediate support</p>
@@ -113,5 +115,9 @@
     <div id="footer-placeholder"></div>
 
     <script src="js/script.js"></script>
+    <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
+    <script>
+      AOS.init();
+    </script>
 </body>
 </html>

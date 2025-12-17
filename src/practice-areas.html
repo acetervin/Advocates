@@ -11,13 +11,15 @@
     <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400;1,500&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
 
     <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/animations.css">
+    <link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
 </head>
 <body>
 
     <div id="top-bar-placeholder"></div>
     <div id="navbar-placeholder"></div>
 
-    <section class="page-header">
+    <section class="page-header" data-aos="fade-down">
         <div class="page-header-content">
             <span class="section-subtitle">Our Expertise</span>
             <h1>Practice <span class="heading-italic">Areas</span></h1>
@@ -25,7 +27,7 @@
         </div>
     </section>
 
-    <section class="section practice-detail-section">
+    <section class="section practice-detail-section" data-aos="fade-right">
         <div class="practice-detail">
             <div class="practice-detail-img">
                 <img src="https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80" alt="Corporate & Commercial">
@@ -47,7 +49,7 @@
         </div>
     </section>
 
-    <section class="section practice-detail-section" style="background: white;">
+    <section class="section practice-detail-section" style="background: white;" data-aos="fade-left">
         <div class="practice-detail">
             <div class="practice-detail-img" style="order: 2;">
                 <img src="https://images.unsplash.com/photo-1560518883-ce09059eeffa?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80" alt="Real Estate">
@@ -69,7 +71,7 @@
         </div>
     </section>
 
-    <section class="section practice-detail-section">
+    <section class="section practice-detail-section" data-aos="fade-right">
         <div class="practice-detail">
             <div class="practice-detail-img">
                 <img src="https://images.unsplash.com/photo-1589829085413-56de8ae18c73?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80" alt="Dispute Resolution">
@@ -91,7 +93,7 @@
         </div>
     </section>
 
-    <section class="section practice-detail-section" style="background: white;">
+    <section class="section practice-detail-section" style="background: white;" data-aos="fade-left">
         <div class="practice-detail">
             <div class="practice-detail-img" style="order: 2;">
                 <img src="https://images.unsplash.com/photo-1554224155-8d04cb21cd6c?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80" alt="Tax & Finance">
@@ -113,7 +115,7 @@
         </div>
     </section>
 
-    <section class="section practice-detail-section">
+    <section class="section practice-detail-section" data-aos="fade-right">
         <div class="practice-detail">
             <div class="practice-detail-img">
                 <img src="https://images.unsplash.com/photo-1521791136064-7986c2920216?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80" alt="Family Law">
@@ -135,7 +137,7 @@
         </div>
     </section>
 
-    <section class="section practice-detail-section" style="background: white;">
+    <section class="section practice-detail-section" style="background: white;" data-aos="fade-left">
         <div class="practice-detail">
             <div class="practice-detail-img" style="order: 2;">
                 <img src="https://images.unsplash.com/photo-1534353436294-0dbd4bdac845?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80" alt="Intellectual Property">
@@ -157,7 +159,7 @@
         </div>
     </section>
 
-    <section class="cta-section">
+    <section class="cta-section" data-aos="fade-up">
         <div class="cta-content">
             <h2>Ready to Work With Us?</h2>
             <p>Schedule a free consultation with our legal experts today</p>
@@ -168,5 +170,9 @@
     <div id="footer-placeholder"></div>
 
     <script src="js/script.js"></script>
+    <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
+    <script>
+      AOS.init();
+    </script>
 </body>
 </html>
