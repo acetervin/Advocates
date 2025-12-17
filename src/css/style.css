@@ -883,7 +883,6 @@ h1, h2, h3, h4, h5 {
     max-width: 1200px; /* Limit width */
     margin: 4rem auto; /* Center and add top/bottom margin */
     border-radius: 15px; /* Rounded corners */
-    padding: 0 24px; /* Add padding for smaller screens */
 }
 
 .video-banner {
@@ -1898,7 +1897,6 @@ h1, h2, h3, h4, h5 {
     overflow: hidden;
     max-width: 1200px; /* Limit width */
     margin: 0 auto 6rem auto; /* Center and add bottom space */
-    padding: 0 24px; /* Add padding for smaller screens */
 }
 
 .map-section iframe {
