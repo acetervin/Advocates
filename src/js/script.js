@@ -28,6 +28,7 @@ document.addEventListener('DOMContentLoaded', function() {
         initializeNavigation();
         AOS.init();
         initStatCounters();
+        initHeroCarousel();
     };
 
     function initializeNavigation() {
@@ -251,6 +252,102 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     renderTestimonials();
+
+    // --- Hero Image Carousel ---
+    function initHeroCarousel() {
+        const carousel = document.querySelector('.hero-carousel');
+        if (!carousel) return;
+
+        const slidesContainer = carousel.querySelector('.hero-slides');
+        let slides = Array.from(carousel.querySelectorAll('.hero-slide'));
+        const prevBtn = carousel.querySelector('.carousel-prev');
+        const nextBtn = carousel.querySelector('.carousel-next');
+        const dotsContainer = carousel.querySelector('.carousel-dots');
+        let index = 0;
+        let timer = null;
+        const interval = 6000;
+
+        // Create clones for seamless infinite loop
+        if (slides.length > 1) {
+            const firstClone = slides[0].cloneNode(true);
+            const lastClone = slides[slides.length - 1].cloneNode(true);
+            slidesContainer.appendChild(firstClone);
+            slidesContainer.insertBefore(lastClone, slidesContainer.firstChild);
+            slides = Array.from(slidesContainer.querySelectorAll('.hero-slide'));
+            // Start at the first real slide (index 1 because of prepended clone)
+            index = 1;
+            slidesContainer.style.transform = `translateX(${ -index * 100 }%)`;
+        }
+
+        // Build (hidden) dots for accessibility if needed
+        slides.forEach((s, i) => {
+            const dot = document.createElement('button');
+            dot.className = 'carousel-dot';
+            dot.setAttribute('aria-label', `Slide ${i + 1}`);
+            dot.addEventListener('click', () => {
+                // map clicked dot to real-slide index (if clones exist)
+                const realIndex = slides.length > 2 ? i : i; // kept simple; dots are hidden
+                goTo(realIndex);
+                resetTimer();
+            });
+            dotsContainer.appendChild(dot);
+        });
+
+        // Helper to enable/disable transition for jump
+        function setTransition(enabled) {
+            slidesContainer.style.transition = enabled ? 'transform 0.7s cubic-bezier(.22,.9,.32,1)' : 'none';
+        }
+
+        function update() {
+            slidesContainer.style.transform = `translateX(${ -index * 100 }%)`;
+            // Active class for scale/opacity effect
+            slides.forEach((s, i) => s.classList.toggle('active', i === index));
+            const dots = dotsContainer.querySelectorAll('.carousel-dot');
+            dots.forEach((d, i) => d.classList.toggle('active', i === index));
+        }
+
+        function next() { index = index + 1; setTransition(true); update(); }
+        function prev() { index = index - 1; setTransition(true); update(); }
+        function goTo(i) { index = i; setTransition(true); update(); }
+
+        function startTimer() { timer = setInterval(() => next(), interval); }
+        function stopTimer() { if (timer) clearInterval(timer); }
+        function resetTimer() { stopTimer(); startTimer(); }
+
+        // When transition ends, if we're on a clone, jump to the real slide without transition
+        slidesContainer.addEventListener('transitionend', () => {
+            // If clone at end
+            if (index === slides.length - 1) {
+                // jump to first real slide
+                setTransition(false);
+                index = 1;
+                update();
+            }
+            // If clone at start
+            if (index === 0) {
+                setTransition(false);
+                index = slides.length - 2;
+                update();
+            }
+        });
+
+        if (nextBtn) nextBtn.addEventListener('click', () => { next(); resetTimer(); });
+        if (prevBtn) prevBtn.addEventListener('click', () => { prev(); resetTimer(); });
+
+        carousel.addEventListener('mouseenter', stopTimer);
+        carousel.addEventListener('mouseleave', startTimer);
+
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowLeft') { prev(); resetTimer(); }
+            if (e.key === 'ArrowRight') { next(); resetTimer(); }
+        });
+
+        // Initial styling setup
+        setTransition(false);
+        update();
+        // allow paint then enable timer
+        requestAnimationFrame(() => requestAnimationFrame(() => startTimer()));
+    }
 
     // --- Video Modal Logic ---
     const videoUrl = "https://www.youtube.com/embed/dQw4w9WgXcQ"; // Example video
