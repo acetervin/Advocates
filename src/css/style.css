@@ -1367,17 +1367,6 @@ h1, h2, h3, h4, h5 {
     line-height: 1.8;
 }
 
-.page-header-content h1 {
-    font-size: 3.5rem;
-    color: white;
-    margin-bottom: 1rem;
-}
-
-.page-header-content p {
-    color: rgba(255,255,255,0.8);
-    font-size: 1.1rem;
-    line-height: 1.8;
-}
 
 /* --- PRACTICE DETAIL SECTION --- */
 .practice-detail-section {
