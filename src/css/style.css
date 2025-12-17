@@ -880,6 +880,10 @@ h1, h2, h3, h4, h5 {
     position: relative;
     background: #1a1a1a;
     overflow: hidden;
+    max-width: 1200px; /* Limit width */
+    margin: 4rem auto; /* Center and add top/bottom margin */
+    border-radius: 15px; /* Rounded corners */
+    padding: 0 24px; /* Add padding for smaller screens */
 }
 
 .video-banner {
@@ -888,6 +892,7 @@ h1, h2, h3, h4, h5 {
     display: flex;
     align-items: center;
     justify-content: center;
+    overflow: hidden; /* Ensure content is clipped within rounded corners */
 }
 
 .video-banner-bg {
@@ -1390,7 +1395,6 @@ h1, h2, h3, h4, h5 {
     color: var(--text-gray);
     font-size: 1.1rem;
     line-height: 1.8;
-}
 }
 
 .page-header-content h1 {
@@ -1985,6 +1989,11 @@ h1, h2, h3, h4, h5 {
     .team-card-img {
         height: 280px;
     }
+
+    .video-section {
+        height: 400px; /* Adjust height for smaller screens */
+        margin: 4rem auto;
+    }
 }
 
 /* --- VIDEO MODAL --- */
@@ -2058,6 +2067,11 @@ h1, h2, h3, h4, h5 {
     .case-study-header {
         flex-direction: column;
         align-items: flex-start;
+    }
+
+    .video-section {
+        height: 300px; /* Further adjust height for very small screens */
+        margin: 3rem auto;
     }
 
     
