@@ -128,5 +128,41 @@ document.addEventListener('DOMContentLoaded', function() {
         showTestimonial(currentTestimonial + direction);
     }
 
+    // --- Video Modal Logic ---
+    const videoUrl = "https://www.youtube.com/embed/dQw4w9WgXcQ"; // Example video
+
+    window.openVideo = function() {
+        const modal = document.createElement('div');
+        modal.classList.add('video-modal-overlay');
+        modal.innerHTML = `
+            <div class="video-modal-content">
+                <span class="video-modal-close" onclick="closeVideo()">&times;</span>
+                <div class="video-aspect">
+                    <iframe src="${videoUrl}?autoplay=1" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                </div>
+            </div>
+        `;
+        document.body.appendChild(modal);
+        document.body.style.overflow = 'hidden';
+
+        // Close on escape key
+        document.addEventListener('keydown', handleVideoEsc);
+    }
+
+    window.closeVideo = function() {
+        const modal = document.querySelector('.video-modal-overlay');
+        if (modal) {
+            modal.remove();
+            document.body.style.overflow = '';
+            document.removeEventListener('keydown', handleVideoEsc);
+        }
+    }
+    
+    function handleVideoEsc(e) {
+        if (e.key === 'Escape') {
+            closeVideo();
+        }
+    }
+
     initializePage();
 });

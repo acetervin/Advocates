@@ -132,6 +132,7 @@ h1, h2, h3, h4, h5 {
     color: var(--text-light);
     transition: color 0.3s;
     font-size: 13px;
+    text-decoration: none;
 }
 
 .social-icons a:hover {
@@ -1362,7 +1363,7 @@ h1, h2, h3, h4, h5 {
 
 /* --- PAGE HEADER --- */
 .page-header {
-    background: linear-gradient(135deg, var(--brand-black) 0%, #2a2a2a 100%);
+    background: var(--bg-cream);
     padding: 180px 0 80px;
     text-align: center;
     position: relative;
@@ -1376,20 +1377,20 @@ h1, h2, h3, h4, h5 {
     left: 0;
     right: 0;
     bottom: 0;
-    background: url('https://images.unsplash.com/photo-1589829085413-56de8ae18c73?ixlib=rb-1.2.1&auto=format&fit=crop&w=1600&q=80') center/cover;
-    opacity: 0.1;
+    background: none;
+    opacity: 0;
 }
 
-.page-header-content {
-    position: relative;
-    z-index: 2;
-    max-width: 800px;
-    margin: 0 auto;
-    padding: 0 24px;
+.page-header-content h1 {
+    font-size: 3.5rem;
+    color: var(--brand-black);
+    margin-bottom: 1rem;
 }
-
-.page-header-content .section-subtitle {
-    color: var(--brand-gold);
+.page-header-content p {
+    color: var(--text-gray);
+    font-size: 1.1rem;
+    line-height: 1.8;
+}
 }
 
 .page-header-content h1 {
@@ -1685,6 +1686,7 @@ h1, h2, h3, h4, h5 {
     background: var(--brand-gold);
     color: white;
     transition: var(--transition);
+    text-decoration: none;
 }
 
 .contact-social a:hover {
@@ -1876,6 +1878,7 @@ h1, h2, h3, h4, h5 {
     background: var(--bg-cream);
     color: var(--text-gray);
     transition: var(--transition);
+    text-decoration: none;
 }
 
 .team-card-social a:hover {
@@ -1887,12 +1890,18 @@ h1, h2, h3, h4, h5 {
 .map-section {
     height: 400px;
     background: #ddd;
+    border-radius: 15px;
+    overflow: hidden;
+    max-width: 1200px; /* Limit width */
+    margin: 0 auto 6rem auto; /* Center and add bottom space */
+    padding: 0 24px; /* Add padding for smaller screens */
 }
 
 .map-section iframe {
     width: 100%;
     height: 100%;
     border: none;
+    border-radius: 15px;
 }
 
 /* --- RESPONSIVE FOR NEW SECTIONS --- */
@@ -1970,12 +1979,68 @@ h1, h2, h3, h4, h5 {
     
     .map-section {
         height: 300px;
+        margin-bottom: 4rem; /* Adjust for smaller screens */
     }
     
     .team-card-img {
         height: 280px;
     }
 }
+
+/* --- VIDEO MODAL --- */
+.video-modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.85);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 2000;
+    animation: fadeIn 0.3s ease;
+}
+
+.video-modal-content {
+    position: relative;
+    width: 90%;
+    max-width: 900px;
+    background: black;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+}
+
+.video-modal-content .video-aspect {
+    position: relative;
+    width: 100%;
+    padding-bottom: 56.25%; /* 16:9 aspect ratio */
+    height: 0;
+}
+
+.video-modal-content iframe {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border: none;
+}
+
+.video-modal-close {
+    position: absolute;
+    top: -40px;
+    right: 0;
+    color: white;
+    font-size: 35px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: color 0.3s;
+}
+
+.video-modal-close:hover {
+    color: var(--brand-gold);
+}
+
 
 @media (max-width: 600px) {
     .page-header {
@@ -1994,6 +2059,7 @@ h1, h2, h3, h4, h5 {
         flex-direction: column;
         align-items: flex-start;
     }
+
     
     .case-study-header h3 {
         font-size: 1.4rem;
@@ -2105,7 +2171,6 @@ footer {
 
 .footer-logo {
     height: 50px;
-    filter: brightness(0) invert(1);
 }
 
 .footer-about {
