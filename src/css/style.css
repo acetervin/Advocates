@@ -21,6 +21,21 @@
 * { margin: 0; padding: 0; box-sizing: border-box; }
 html { scroll-behavior: smooth; }
 
+/* --- CONTAINER --- */
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 24px;
+    width: 100%;
+}
+
+.container-wide {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 0 24px;
+    width: 100%;
+}
+
 body {
     font-family: var(--font-body);
     color: var(--text-gray);
@@ -96,17 +111,20 @@ h1, h2, h3, h4, h5 {
 
 /* --- TOP BAR --- */
 .top-bar {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 12px 5%;
     background-color: var(--bg-cream);
     border-bottom: 1px solid rgba(0,0,0,0.05);
-    font-size: 13px;
-    color: var(--text-light);
     height: var(--top-bar-height);
     position: relative;
     z-index: 1002;
+}
+
+.top-bar .container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    height: 100%;
+    font-size: 13px;
+    color: var(--text-light);
 }
 
 .social-icons a {
@@ -132,10 +150,6 @@ h1, h2, h3, h4, h5 {
 
 /* --- NAVBAR --- */
 .navbar {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 0 5%;
     height: var(--nav-height);
     position: absolute;
     top: var(--top-bar-height);
@@ -144,6 +158,13 @@ h1, h2, h3, h4, h5 {
     background-color: transparent;
     z-index: 1000;
     transition: all 0.4s ease;
+}
+
+.navbar .container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    height: 100%;
 }
 
 .navbar.scrolled {
@@ -309,15 +330,18 @@ h1, h2, h3, h4, h5 {
 
 /* --- HERO SECTION --- */
 .hero {
-    padding: 140px 5% 80px;
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 4rem;
-    align-items: center;
+    padding: 140px 0 80px;
     min-height: 100vh;
     position: relative;
     overflow: hidden;
     background: var(--bg-cream);
+}
+
+.hero .container {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 4rem;
+    align-items: center;
 }
 
 .hero-watermark {
@@ -413,7 +437,7 @@ h1, h2, h3, h4, h5 {
 
 /* --- FEATURES/INTRO SECTION --- */
 .features-section {
-    padding: 5rem 5%;
+    padding: 5rem 0;
     background: white;
     border-top: 1px solid rgba(0,0,0,0.05);
 }
@@ -422,8 +446,6 @@ h1, h2, h3, h4, h5 {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     gap: 3rem;
-    max-width: 1200px;
-    margin: 0 auto;
 }
 
 .feature-item {
@@ -458,13 +480,16 @@ h1, h2, h3, h4, h5 {
 }
 
 /* Old intro-grid styling for backwards compatibility */
+.intro-section {
+    padding: 4rem 0;
+    background: white;
+    border-top: 1px solid rgba(0,0,0,0.05);
+}
+
 .intro-grid {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     gap: 2rem;
-    padding: 4rem 5%;
-    background: white;
-    border-top: 1px solid rgba(0,0,0,0.05);
 }
 
 .intro-item {
@@ -492,7 +517,7 @@ h1, h2, h3, h4, h5 {
 }
 
 /* --- PRACTICE AREAS SECTION --- */
-.section { padding: 6rem 5%; }
+.section { padding: 6rem 0; }
 .section-header { 
     text-align: center; 
     margin-bottom: 4rem;
@@ -605,16 +630,14 @@ h1, h2, h3, h4, h5 {
 
 /* --- STATS SECTION --- */
 .stats-section {
-    padding: 5rem 5%;
+    padding: 5rem 0;
     background: var(--bg-cream);
 }
 
-.stats-container {
+.stats-grid {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
     gap: 2rem;
-    max-width: 1000px;
-    margin: 0 auto;
     text-align: center;
 }
 
@@ -658,7 +681,7 @@ h1, h2, h3, h4, h5 {
 
 /* --- ABOUT/STORY SECTION --- */
 .about-section {
-    padding: 6rem 5%;
+    padding: 6rem 0;
     background: white;
     position: relative;
     overflow: hidden;
@@ -678,13 +701,11 @@ h1, h2, h3, h4, h5 {
     white-space: nowrap;
 }
 
-.about-container {
+.about-grid {
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 5rem;
     align-items: center;
-    max-width: 1200px;
-    margin: 0 auto;
     position: relative;
     z-index: 1;
 }
@@ -754,7 +775,7 @@ h1, h2, h3, h4, h5 {
 
 /* --- TEAM SECTION --- */
 .team-section {
-    padding: 6rem 5%;
+    padding: 6rem 0;
     background: var(--bg-cream);
     position: relative;
     overflow: hidden;
@@ -956,7 +977,7 @@ h1, h2, h3, h4, h5 {
 
 /* --- TESTIMONIALS SECTION --- */
 .testimonials-section {
-    padding: 6rem 5%;
+    padding: 6rem 0;
     background: var(--bg-cream);
     position: relative;
     overflow: hidden;
@@ -1168,7 +1189,7 @@ h1, h2, h3, h4, h5 {
 
 /* --- CASE STUDIES SECTION --- */
 .case-studies-section {
-    padding: 6rem 5%;
+    padding: 6rem 0;
     background: white;
 }
 
@@ -1266,7 +1287,7 @@ h1, h2, h3, h4, h5 {
 
 /* --- BLOG SECTION --- */
 .blog-section {
-    padding: 6rem 5%;
+    padding: 6rem 0;
     background: var(--bg-cream);
 }
 
@@ -1346,10 +1367,13 @@ footer {
 }
 
 .footer-top {
+    padding: 5rem 0;
+}
+
+.footer-grid {
     display: grid;
     grid-template-columns: 1.5fr 1fr 1fr 1fr;
     gap: 4rem;
-    padding: 5rem 5%;
 }
 
 .footer-logo-box {
@@ -1571,10 +1595,13 @@ footer {
         visibility: visible;
     }
 
-    .hero {
+    .hero .container {
         grid-template-columns: 1fr;
-        padding-top: 100px;
         text-align: center;
+    }
+
+    .hero {
+        padding-top: 100px;
         min-height: auto;
     }
 
@@ -1596,24 +1623,24 @@ footer {
     .case-studies-grid,
     .blog-grid { grid-template-columns: 1fr 1fr; }
 
-    .stats-container,
+    .stats-grid,
     .team-grid { grid-template-columns: repeat(2, 1fr); }
 
-    .about-container { grid-template-columns: 1fr; gap: 3rem; }
+    .about-grid { grid-template-columns: 1fr; gap: 3rem; }
     .consult-section { grid-template-columns: 1fr; }
     .video-container { grid-template-columns: 1fr; }
-    .footer-top { grid-template-columns: 1fr 1fr; }
+    .footer-grid { grid-template-columns: 1fr 1fr; }
 }
 
 @media (max-width: 600px) {
     .practice-grid,
     .case-studies-grid,
     .blog-grid,
-    .stats-container,
+    .stats-grid,
     .team-grid { grid-template-columns: 1fr; }
 
     .form-row { grid-template-columns: 1fr; }
-    .footer-top { grid-template-columns: 1fr; }
+    .footer-grid { grid-template-columns: 1fr; }
     .hero-content h1 { font-size: 2.2rem; }
 
     .section-header h2 { font-size: 2rem; }
