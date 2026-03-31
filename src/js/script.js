@@ -1,4 +1,4 @@
-// script.js
+﻿// script.js
 
 document.addEventListener('DOMContentLoaded', function() {
     
@@ -26,10 +26,18 @@ document.addEventListener('DOMContentLoaded', function() {
     const initializePage = async () => {
         await loadComponents();
         initializeNavigation();
+        initFooter();
         AOS.init();
         initStatCounters();
         initHeroCarousel();
     };
+
+    function initFooter() {
+        const yearSpan = document.getElementById('current-year');
+        if (yearSpan) {
+            yearSpan.textContent = new Date().getFullYear();
+        }
+    }
 
     function initializeNavigation() {
         const navbar = document.getElementById('navbar');
@@ -113,14 +121,14 @@ document.addEventListener('DOMContentLoaded', function() {
     // --- New Testimonial Carousel Logic ---
     const testimonials = [
         {
-            quote: "Romlaw Advocates provided exceptional legal guidance for our corporate acquisition. Their attention to detail and strategic approach made the entire process smooth and stress-free. Highly recommended!",
+            quote: "Lawxxx Advocates provided exceptional legal guidance for our corporate acquisition. Their attention to detail and strategic approach made the entire process smooth and stress-free. Highly recommended!",
             author: "Sarah Mwangi",
             title: "CEO, Tech Solutions Kenya",
             avatar: "https://randomuser.me/api/portraits/women/68.jpg",
             stars: 5
         },
         {
-            quote: "When we faced a significant property dispute, Romlaw's expertise in real estate law was invaluable. They negotiated favorable terms and resolved our concerns efficiently. Outstanding service!",
+            quote: "When we faced a significant property dispute, Lawxxx's expertise in real estate law was invaluable. They negotiated favorable terms and resolved our concerns efficiently. Outstanding service!",
             author: "James Kipchoge",
             title: "Property Developer",
             avatar: "https://randomuser.me/api/portraits/men/41.jpg",
@@ -134,14 +142,14 @@ document.addEventListener('DOMContentLoaded', function() {
             stars: 5
         },
         {
-            quote: "Romlaw Advocates handled my intellectual property matters with precision and care. They successfully registered my trademarks and protected my brand from infringement.",
+            quote: "Lawxxx Advocates handled my intellectual property matters with precision and care. They successfully registered my trademarks and protected my brand from infringement.",
             author: "David Okeyo",
             title: "Business Owner & Innovator",
             avatar: "https://randomuser.me/api/portraits/men/32.jpg",
             stars: 5
         },
         {
-            quote: "The team at Romlaw is not only highly skilled but also incredibly supportive. They guided me through a difficult family law matter with compassion and professionalism.",
+            quote: "The team at Lawxxx is not only highly skilled but also incredibly supportive. They guided me through a difficult family law matter with compassion and professionalism.",
             author: "Jane Muthoni",
             title: "Private Client",
             avatar: "https://randomuser.me/api/portraits/women/31.jpg",
@@ -176,7 +184,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     <p>${t.title}</p>
                 </div>
                 <div class="testimonial-stars">${stars}</div>
-                <p class="testimonial-text">“${t.quote}”</p>
+                <p class="testimonial-text">â€œ${t.quote}â€</p>
             `;
             slider.appendChild(card);
 
