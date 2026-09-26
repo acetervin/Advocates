@@ -270,109 +270,135 @@ document.addEventListener('DOMContentLoaded', function() {
         const carousel = document.querySelector('.hero-carousel');
         if (!carousel) return;
 
-        const slidesContainer = carousel.querySelector('.hero-slides');
-        if (!slidesContainer) return;
-
-        let slides = Array.from(carousel.querySelectorAll('.hero-slide'));
-        const originalCount = slides.length;
-        if (originalCount === 0) return;
+        const slides = Array.from(carousel.querySelectorAll('.hero-slide'));
+        const total = slides.length;
+        if (total === 0) return;
 
         const prevBtn = carousel.querySelector('.carousel-prev');
         const nextBtn = carousel.querySelector('.carousel-next');
         const dotsContainer = carousel.querySelector('.carousel-dots');
-        let index = 0;
-        let timer = null;
+        let currentIndex = 0;
         let isTransitioning = false;
-        let transitionTimeout = null;
+        let timer = null;
         const interval = 6000;
 
-        // Build dots for the original slides
+        // Initialize slides positions
+        slides.forEach((slide, i) => {
+            slide.style.transition = 'none';
+            if (i === 0) {
+                slide.className = 'hero-slide active';
+                slide.style.transform = 'translateX(0)';
+                slide.style.visibility = 'visible';
+            } else {
+                slide.className = 'hero-slide';
+                slide.style.transform = 'translateX(100%)';
+                slide.style.visibility = 'hidden';
+            }
+        });
+        void carousel.offsetHeight; // Force reflow
+
+        // Re-enable CSS transitions
+        requestAnimationFrame(() => {
+            slides.forEach(slide => {
+                slide.style.transition = '';
+            });
+        });
+
+        function updateDots(activeIdx) {
+            if (!dotsContainer) return;
+            const dots = dotsContainer.querySelectorAll('.carousel-dot');
+            dots.forEach((dot, i) => dot.classList.toggle('active', i === activeIdx));
+        }
+
+        // Initialize dots if container exists
         if (dotsContainer) {
             dotsContainer.innerHTML = '';
-            for (let i = 0; i < originalCount; i++) {
+            slides.forEach((_, i) => {
                 const dot = document.createElement('button');
-                dot.className = 'carousel-dot';
+                dot.className = 'carousel-dot' + (i === 0 ? ' active' : '');
                 dot.setAttribute('aria-label', `Slide ${i + 1}`);
                 dot.addEventListener('click', () => {
-                    goTo(originalCount > 1 ? i + 1 : i);
+                    goTo(i);
                     resetTimer();
                 });
                 dotsContainer.appendChild(dot);
-            }
+            });
         }
 
-        // Create clones for seamless infinite loop if more than 1 slide
-        if (originalCount > 1) {
-            const firstClone = slides[0].cloneNode(true);
-            const lastClone = slides[originalCount - 1].cloneNode(true);
-            firstClone.classList.remove('active');
-            lastClone.classList.remove('active');
-            slidesContainer.appendChild(firstClone);
-            slidesContainer.insertBefore(lastClone, slidesContainer.firstChild);
-            slides = Array.from(slidesContainer.querySelectorAll('.hero-slide'));
-            index = 1;
-        }
+        function slideTo(nextIndex, direction = 'next') {
+            if (isTransitioning || nextIndex === currentIndex || total <= 1) return;
+            isTransitioning = true;
 
-        function setTransition(enabled) {
-            if (enabled) {
-                slidesContainer.classList.add('is-sliding');
+            const currentSlide = slides[currentIndex];
+            const nextSlide = slides[nextIndex];
+
+            // 1. Instantly stage incoming slide at outer boundary with no transition
+            nextSlide.style.transition = 'none';
+            if (direction === 'next') {
+                nextSlide.style.transform = 'translateX(100%)';
             } else {
-                slidesContainer.classList.remove('is-sliding');
+                nextSlide.style.transform = 'translateX(-100%)';
             }
-        }
+            nextSlide.className = 'hero-slide';
+            nextSlide.style.visibility = 'visible';
 
-        function update(skipActiveClasses = false) {
-            slidesContainer.style.transform = `translateX(${ -index * 100 }%)`;
-            if (!skipActiveClasses) {
-                slides.forEach((s, i) => s.classList.toggle('active', i === index));
-                if (dotsContainer) {
-                    const dots = dotsContainer.querySelectorAll('.carousel-dot');
-                    const realIndex = originalCount > 1 ? (index - 1 + originalCount) % originalCount : index;
-                    dots.forEach((d, i) => d.classList.toggle('active', i === realIndex));
+            // 2. Force reflow so browser commits staged starting position
+            void nextSlide.offsetWidth;
+
+            // 3. Re-enable CSS transitions
+            nextSlide.style.transition = '';
+            currentSlide.style.transition = '';
+
+            // 4. Trigger simultaneous slide
+            requestAnimationFrame(() => {
+                if (direction === 'next') {
+                    currentSlide.className = 'hero-slide exit-left';
+                    nextSlide.className = 'hero-slide active';
+                } else {
+                    currentSlide.className = 'hero-slide exit-right';
+                    nextSlide.className = 'hero-slide active';
                 }
-            }
-        }
+            });
 
-        function finishTransition() {
-            isTransitioning = false;
-            if (transitionTimeout) {
-                clearTimeout(transitionTimeout);
-                transitionTimeout = null;
-            }
+            currentIndex = nextIndex;
+            updateDots(currentIndex);
+
+            // 5. Clean up after transition completes (650ms transition + buffer)
+            setTimeout(() => {
+                slides.forEach((s, idx) => {
+                    if (idx !== currentIndex) {
+                        s.className = 'hero-slide';
+                        s.style.transition = 'none';
+                        s.style.transform = 'translateX(100%)';
+                        s.style.visibility = 'hidden';
+                    } else {
+                        s.className = 'hero-slide active';
+                        s.style.transform = 'translateX(0)';
+                        s.style.visibility = 'visible';
+                    }
+                });
+                isTransitioning = false;
+            }, 700);
         }
 
         function next() {
-            if (originalCount <= 1 || isTransitioning) return;
-            isTransitioning = true;
-            index++;
-            setTransition(true);
-            update();
-            clearTimeout(transitionTimeout);
-            transitionTimeout = setTimeout(finishTransition, 750);
+            const nextIndex = (currentIndex + 1) % total;
+            slideTo(nextIndex, 'next');
         }
 
         function prev() {
-            if (originalCount <= 1 || isTransitioning) return;
-            isTransitioning = true;
-            index--;
-            setTransition(true);
-            update();
-            clearTimeout(transitionTimeout);
-            transitionTimeout = setTimeout(finishTransition, 750);
+            const prevIndex = (currentIndex - 1 + total) % total;
+            slideTo(prevIndex, 'prev');
         }
 
-        function goTo(i) {
-            if (isTransitioning || i === index) return;
-            isTransitioning = true;
-            index = i;
-            setTransition(true);
-            update();
-            clearTimeout(transitionTimeout);
-            transitionTimeout = setTimeout(finishTransition, 750);
+        function goTo(index) {
+            if (index === currentIndex) return;
+            const direction = index > currentIndex ? 'next' : 'prev';
+            slideTo(index, direction);
         }
 
         function startTimer() {
-            if (originalCount > 1) {
+            if (total > 1) {
                 stopTimer();
                 timer = setInterval(next, interval);
             }
@@ -389,29 +415,6 @@ document.addEventListener('DOMContentLoaded', function() {
             stopTimer();
             startTimer();
         }
-
-        // When transition ends, handle loop jumps seamlessly without bounce
-        slidesContainer.addEventListener('transitionend', (e) => {
-            if (e.target !== slidesContainer) return;
-            if (!e.propertyName.includes('transform')) return;
-
-            if (originalCount > 1) {
-                if (index === slides.length - 1) {
-                    // Reached cloned first slide at end, silently reset to real first slide
-                    setTransition(false);
-                    index = 1;
-                    update();
-                    void slidesContainer.offsetHeight; // Force reflow
-                } else if (index === 0) {
-                    // Reached cloned last slide at beginning, silently reset to real last slide
-                    setTransition(false);
-                    index = slides.length - 2;
-                    update();
-                    void slidesContainer.offsetHeight; // Force reflow
-                }
-            }
-            finishTransition();
-        });
 
         if (nextBtn) {
             nextBtn.addEventListener('click', (e) => {
@@ -431,6 +434,15 @@ document.addEventListener('DOMContentLoaded', function() {
 
         carousel.addEventListener('mouseenter', stopTimer);
         carousel.addEventListener('mouseleave', startTimer);
+
+        // Pause autoplay when tab is inactive to prevent background desync
+        document.addEventListener('visibilitychange', () => {
+            if (document.hidden) {
+                stopTimer();
+            } else {
+                startTimer();
+            }
+        });
 
         document.addEventListener('keydown', (e) => {
             if (e.key === 'ArrowLeft') { prev(); resetTimer(); }
@@ -457,15 +469,7 @@ document.addEventListener('DOMContentLoaded', function() {
             startTimer();
         }, { passive: true });
 
-        // Initial styling setup
-        setTransition(false);
-        update();
-        void slidesContainer.offsetHeight;
-        requestAnimationFrame(() => {
-            requestAnimationFrame(() => {
-                startTimer();
-            });
-        });
+        startTimer();
     }
 
     // --- Video Modal Logic ---
