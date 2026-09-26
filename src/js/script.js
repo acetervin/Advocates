@@ -1,4 +1,4 @@
-﻿// script.js
+// script.js
 
 document.addEventListener('DOMContentLoaded', function() {
     
@@ -27,7 +27,9 @@ document.addEventListener('DOMContentLoaded', function() {
         await loadComponents();
         initializeNavigation();
         initFooter();
-        AOS.init();
+        if (typeof AOS !== 'undefined') {
+            AOS.init();
+        }
         initStatCounters();
         initHeroCarousel();
     };
@@ -60,10 +62,12 @@ document.addEventListener('DOMContentLoaded', function() {
 
         // 2. Sticky Navbar Effect
         window.addEventListener('scroll', () => {
-            if (window.scrollY > 50) {
-                navbar.classList.add('scrolled');
-            } else {
-                navbar.classList.remove('scrolled');
+            if (navbar) {
+                if (window.scrollY > 50) {
+                    navbar.classList.add('scrolled');
+                } else {
+                    navbar.classList.remove('scrolled');
+                }
             }
         });
 
@@ -184,7 +188,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     <p>${t.title}</p>
                 </div>
                 <div class="testimonial-stars">${stars}</div>
-                <p class="testimonial-text">â€œ${t.quote}â€</p>
+                <p class="testimonial-text">&ldquo;${t.quote}&rdquo;</p>
             `;
             slider.appendChild(card);
 
@@ -267,80 +271,163 @@ document.addEventListener('DOMContentLoaded', function() {
         if (!carousel) return;
 
         const slidesContainer = carousel.querySelector('.hero-slides');
+        if (!slidesContainer) return;
+
         let slides = Array.from(carousel.querySelectorAll('.hero-slide'));
+        const originalCount = slides.length;
+        if (originalCount === 0) return;
+
         const prevBtn = carousel.querySelector('.carousel-prev');
         const nextBtn = carousel.querySelector('.carousel-next');
         const dotsContainer = carousel.querySelector('.carousel-dots');
         let index = 0;
         let timer = null;
+        let isTransitioning = false;
+        let transitionTimeout = null;
         const interval = 6000;
 
-        // Create clones for seamless infinite loop
-        if (slides.length > 1) {
+        // Build dots for the original slides
+        if (dotsContainer) {
+            dotsContainer.innerHTML = '';
+            for (let i = 0; i < originalCount; i++) {
+                const dot = document.createElement('button');
+                dot.className = 'carousel-dot';
+                dot.setAttribute('aria-label', `Slide ${i + 1}`);
+                dot.addEventListener('click', () => {
+                    goTo(originalCount > 1 ? i + 1 : i);
+                    resetTimer();
+                });
+                dotsContainer.appendChild(dot);
+            }
+        }
+
+        // Create clones for seamless infinite loop if more than 1 slide
+        if (originalCount > 1) {
             const firstClone = slides[0].cloneNode(true);
-            const lastClone = slides[slides.length - 1].cloneNode(true);
+            const lastClone = slides[originalCount - 1].cloneNode(true);
+            firstClone.classList.remove('active');
+            lastClone.classList.remove('active');
             slidesContainer.appendChild(firstClone);
             slidesContainer.insertBefore(lastClone, slidesContainer.firstChild);
             slides = Array.from(slidesContainer.querySelectorAll('.hero-slide'));
-            // Start at the first real slide (index 1 because of prepended clone)
             index = 1;
-            slidesContainer.style.transform = `translateX(${ -index * 100 }%)`;
         }
 
-        // Build (hidden) dots for accessibility if needed
-        slides.forEach((s, i) => {
-            const dot = document.createElement('button');
-            dot.className = 'carousel-dot';
-            dot.setAttribute('aria-label', `Slide ${i + 1}`);
-            dot.addEventListener('click', () => {
-                // map clicked dot to real-slide index (if clones exist)
-                const realIndex = slides.length > 2 ? i : i; // kept simple; dots are hidden
-                goTo(realIndex);
+        function setTransition(enabled) {
+            if (enabled) {
+                slidesContainer.classList.add('is-sliding');
+            } else {
+                slidesContainer.classList.remove('is-sliding');
+            }
+        }
+
+        function update(skipActiveClasses = false) {
+            slidesContainer.style.transform = `translateX(${ -index * 100 }%)`;
+            if (!skipActiveClasses) {
+                slides.forEach((s, i) => s.classList.toggle('active', i === index));
+                if (dotsContainer) {
+                    const dots = dotsContainer.querySelectorAll('.carousel-dot');
+                    const realIndex = originalCount > 1 ? (index - 1 + originalCount) % originalCount : index;
+                    dots.forEach((d, i) => d.classList.toggle('active', i === realIndex));
+                }
+            }
+        }
+
+        function finishTransition() {
+            isTransitioning = false;
+            if (transitionTimeout) {
+                clearTimeout(transitionTimeout);
+                transitionTimeout = null;
+            }
+        }
+
+        function next() {
+            if (originalCount <= 1 || isTransitioning) return;
+            isTransitioning = true;
+            index++;
+            setTransition(true);
+            update();
+            clearTimeout(transitionTimeout);
+            transitionTimeout = setTimeout(finishTransition, 750);
+        }
+
+        function prev() {
+            if (originalCount <= 1 || isTransitioning) return;
+            isTransitioning = true;
+            index--;
+            setTransition(true);
+            update();
+            clearTimeout(transitionTimeout);
+            transitionTimeout = setTimeout(finishTransition, 750);
+        }
+
+        function goTo(i) {
+            if (isTransitioning || i === index) return;
+            isTransitioning = true;
+            index = i;
+            setTransition(true);
+            update();
+            clearTimeout(transitionTimeout);
+            transitionTimeout = setTimeout(finishTransition, 750);
+        }
+
+        function startTimer() {
+            if (originalCount > 1) {
+                stopTimer();
+                timer = setInterval(next, interval);
+            }
+        }
+
+        function stopTimer() {
+            if (timer) {
+                clearInterval(timer);
+                timer = null;
+            }
+        }
+
+        function resetTimer() {
+            stopTimer();
+            startTimer();
+        }
+
+        // When transition ends, handle loop jumps seamlessly without bounce
+        slidesContainer.addEventListener('transitionend', (e) => {
+            if (e.target !== slidesContainer) return;
+            if (!e.propertyName.includes('transform')) return;
+
+            if (originalCount > 1) {
+                if (index === slides.length - 1) {
+                    // Reached cloned first slide at end, silently reset to real first slide
+                    setTransition(false);
+                    index = 1;
+                    update();
+                    void slidesContainer.offsetHeight; // Force reflow
+                } else if (index === 0) {
+                    // Reached cloned last slide at beginning, silently reset to real last slide
+                    setTransition(false);
+                    index = slides.length - 2;
+                    update();
+                    void slidesContainer.offsetHeight; // Force reflow
+                }
+            }
+            finishTransition();
+        });
+
+        if (nextBtn) {
+            nextBtn.addEventListener('click', (e) => {
+                e.preventDefault();
+                next();
                 resetTimer();
             });
-            dotsContainer.appendChild(dot);
-        });
-
-        // Helper to enable/disable transition for jump
-        function setTransition(enabled) {
-            slidesContainer.style.transition = enabled ? 'transform 0.7s cubic-bezier(.22,.9,.32,1)' : 'none';
         }
 
-        function update() {
-            slidesContainer.style.transform = `translateX(${ -index * 100 }%)`;
-            // Active class for scale/opacity effect
-            slides.forEach((s, i) => s.classList.toggle('active', i === index));
-            const dots = dotsContainer.querySelectorAll('.carousel-dot');
-            dots.forEach((d, i) => d.classList.toggle('active', i === index));
+        if (prevBtn) {
+            prevBtn.addEventListener('click', (e) => {
+                e.preventDefault();
+                prev();
+                resetTimer();
+            });
         }
-
-        function next() { index = index + 1; setTransition(true); update(); }
-        function prev() { index = index - 1; setTransition(true); update(); }
-        function goTo(i) { index = i; setTransition(true); update(); }
-
-        function startTimer() { timer = setInterval(() => next(), interval); }
-        function stopTimer() { if (timer) clearInterval(timer); }
-        function resetTimer() { stopTimer(); startTimer(); }
-
-        // When transition ends, if we're on a clone, jump to the real slide without transition
-        slidesContainer.addEventListener('transitionend', () => {
-            // If clone at end
-            if (index === slides.length - 1) {
-                // jump to first real slide
-                setTransition(false);
-                index = 1;
-                update();
-            }
-            // If clone at start
-            if (index === 0) {
-                setTransition(false);
-                index = slides.length - 2;
-                update();
-            }
-        });
-
-        if (nextBtn) nextBtn.addEventListener('click', () => { next(); resetTimer(); });
-        if (prevBtn) prevBtn.addEventListener('click', () => { prev(); resetTimer(); });
 
         carousel.addEventListener('mouseenter', stopTimer);
         carousel.addEventListener('mouseleave', startTimer);
@@ -350,11 +437,35 @@ document.addEventListener('DOMContentLoaded', function() {
             if (e.key === 'ArrowRight') { next(); resetTimer(); }
         });
 
+        // Touch swipe support
+        let touchStartX = 0;
+        carousel.addEventListener('touchstart', (e) => {
+            touchStartX = e.changedTouches[0].screenX;
+            stopTimer();
+        }, { passive: true });
+
+        carousel.addEventListener('touchend', (e) => {
+            const touchEndX = e.changedTouches[0].screenX;
+            const diff = touchEndX - touchStartX;
+            if (Math.abs(diff) > 40) {
+                if (diff < 0) {
+                    next();
+                } else {
+                    prev();
+                }
+            }
+            startTimer();
+        }, { passive: true });
+
         // Initial styling setup
         setTransition(false);
         update();
-        // allow paint then enable timer
-        requestAnimationFrame(() => requestAnimationFrame(() => startTimer()));
+        void slidesContainer.offsetHeight;
+        requestAnimationFrame(() => {
+            requestAnimationFrame(() => {
+                startTimer();
+            });
+        });
     }
 
     // --- Video Modal Logic ---
