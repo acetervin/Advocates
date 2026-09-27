@@ -345,25 +345,22 @@ document.addEventListener('DOMContentLoaded', function() {
             // 2. Force reflow so browser commits staged starting position
             void nextSlide.offsetWidth;
 
-            // 3. Re-enable CSS transitions
+            // 3. Re-enable CSS transitions and trigger simultaneous slide instantly
             nextSlide.style.transition = '';
             currentSlide.style.transition = '';
 
-            // 4. Trigger simultaneous slide
-            requestAnimationFrame(() => {
-                if (direction === 'next') {
-                    currentSlide.className = 'hero-slide exit-left';
-                    nextSlide.className = 'hero-slide active';
-                } else {
-                    currentSlide.className = 'hero-slide exit-right';
-                    nextSlide.className = 'hero-slide active';
-                }
-            });
+            if (direction === 'next') {
+                currentSlide.className = 'hero-slide exit-left';
+                nextSlide.className = 'hero-slide active';
+            } else {
+                currentSlide.className = 'hero-slide exit-right';
+                nextSlide.className = 'hero-slide active';
+            }
 
             currentIndex = nextIndex;
             updateDots(currentIndex);
 
-            // 5. Clean up after transition completes (650ms transition + buffer)
+            // 4. Clean up after transition completes (400ms transition + 20ms buffer)
             setTimeout(() => {
                 slides.forEach((s, idx) => {
                     if (idx !== currentIndex) {
@@ -378,7 +375,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     }
                 });
                 isTransitioning = false;
-            }, 700);
+            }, 420);
         }
 
         function next() {
